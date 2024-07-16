@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class PlayerMovmentScript : MonoBehaviour
@@ -11,6 +12,13 @@ public class PlayerMovmentScript : MonoBehaviour
     [SerializeField] private Transform groundCheck;
     [SerializeField] private LayerMask groundLayer;
     private float groundCheckRadius = 0.2f;
+    [SerializeField] private TrailRenderer trailRenderer;
+
+    private bool canDash = true;
+    private bool isDashing;
+    private float dashingPower = 18f;
+    private float dashingTime = 0.2f;
+    private float dashingCooldown = 1f;
 
     public Animator animator;
 
@@ -23,6 +31,12 @@ public class PlayerMovmentScript : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+
+        if (isDashing)
+        {
+            return;
+        }
+
         //MOVMENT
         float moveInput = Input.GetAxis("Horizontal");
         rb.velocity = new Vector2 (moveInput * speed, rb.velocity.y);
@@ -56,6 +70,33 @@ public class PlayerMovmentScript : MonoBehaviour
             animator.SetTrigger("IsAttacking 0");
         }
 
+        //DASH
+        if(Input.GetKeyDown(KeyCode.LeftShift) && canDash)
+        {
 
+            StartCoroutine(Dash());
+        }
+    }
+    private void FixedUpdate()
+    {
+        if(isDashing)
+        {
+            return;
+        }
+    }
+    private IEnumerator Dash()
+    {
+        canDash = true;
+        isDashing = true;
+        float originalGravity = rb.gravityScale;
+        rb.gravityScale = 0f;
+        rb.velocity = new Vector2(transform.localScale.x *dashingPower, 0f);
+        trailRenderer.emitting = true;
+        yield return new WaitForSeconds(dashingTime);
+        trailRenderer.emitting = false;
+        rb.gravityScale = originalGravity;
+        isDashing = false;
+        yield return new WaitForSeconds(dashingCooldown);
+        canDash = true;
     }
 }
