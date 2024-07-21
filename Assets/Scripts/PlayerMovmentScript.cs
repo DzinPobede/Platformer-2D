@@ -5,22 +5,22 @@ using UnityEngine;
 
 public class PlayerMovmentScript : MonoBehaviour
 {
-    private float speed = 5f;
-    private float jumpPower = 7f;
+    private readonly float speed = 5f;
+    private readonly float jumpPower = 7f;
     private bool isGrounded = false;
     [SerializeField] private Rigidbody2D rb;
     [SerializeField] private Transform groundCheck;
     [SerializeField] private LayerMask groundLayer;
-    private float groundCheckRadius = 0.2f;
+    private readonly float groundCheckRadius = 0.2f;
     [SerializeField] private TrailRenderer trailRenderer;
     [SerializeField] private GameOverScreen gameOverScreen;
 
 
     private bool canDash = true;
     private bool isDashing;
-    private float dashingPower = 18f;
-    private float dashingTime = 0.2f;
-    private float dashingCooldown = 5f;
+    private readonly float dashingPower = 18f;
+    private readonly float dashingTime = 0.2f;
+    private readonly float dashingCooldown = 5f;
     public float maxPosition = 0;
 
     public Animator animator;
@@ -76,7 +76,6 @@ public class PlayerMovmentScript : MonoBehaviour
         //DASH
         if(Input.GetKeyDown(KeyCode.LeftShift) && canDash)
         {
-
             StartCoroutine(Dash());
         }
 
@@ -94,7 +93,7 @@ public class PlayerMovmentScript : MonoBehaviour
     }
     private IEnumerator Dash()
     {
-        canDash = true;
+        canDash = false;
         isDashing = true;
         float originalGravity = rb.gravityScale;
         rb.gravityScale = 0f;

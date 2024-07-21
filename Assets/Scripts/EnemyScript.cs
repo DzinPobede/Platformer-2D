@@ -42,9 +42,4 @@ public class EnemyScript : MonoBehaviour
         localScale.x *= -1;
         transform.localScale = localScale;
     }
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
 }
