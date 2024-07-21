@@ -13,12 +13,15 @@ public class PlayerMovmentScript : MonoBehaviour
     [SerializeField] private LayerMask groundLayer;
     private float groundCheckRadius = 0.2f;
     [SerializeField] private TrailRenderer trailRenderer;
+    [SerializeField] private GameOverScreen gameOverScreen;
+
 
     private bool canDash = true;
     private bool isDashing;
     private float dashingPower = 18f;
     private float dashingTime = 0.2f;
     private float dashingCooldown = 1f;
+    public float maxPosition = 0;
 
     public Animator animator;
 
@@ -76,6 +79,11 @@ public class PlayerMovmentScript : MonoBehaviour
 
             StartCoroutine(Dash());
         }
+
+        if(transform.position.x > maxPosition)
+        {
+            maxPosition = transform.position.x;
+        }
     }
     private void FixedUpdate()
     {
@@ -99,4 +107,17 @@ public class PlayerMovmentScript : MonoBehaviour
         yield return new WaitForSeconds(dashingCooldown);
         canDash = true;
     }
+
+    private void OnCollisionEnter2D(Collision2D collision)
+    {
+        if(collision.gameObject.layer == 6)
+        {
+            transform.position = new Vector3(-8.22f, -4, 0);
+            rb.velocity = new Vector2(0, 0);
+            GetComponent<PlayerHealth>().health--;
+        }
+        
+    }
 }
+
+

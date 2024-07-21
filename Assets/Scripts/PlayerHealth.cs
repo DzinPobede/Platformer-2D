@@ -4,10 +4,12 @@ using UnityEngine;
 using UnityEngine.UI;
 public class PlayerHealth : MonoBehaviour
 {
-    [SerializeField] private int health = 3;
+    [SerializeField] public int health = 3;
     [SerializeField] private Image[] hearts;
     [SerializeField] private Sprite fullHeart;
     [SerializeField] private Sprite emptyHeart;
+    [SerializeField] private GameOverScreen gameOverScreen;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -26,6 +28,10 @@ public class PlayerHealth : MonoBehaviour
         {
             hearts[i].sprite = fullHeart;
              
+        }
+        if(health <= 0)
+        {
+            gameOverScreen.Setup(0);
         }
     }
    
