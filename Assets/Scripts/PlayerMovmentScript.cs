@@ -20,7 +20,7 @@ public class PlayerMovmentScript : MonoBehaviour
     private bool isDashing;
     private float dashingPower = 18f;
     private float dashingTime = 0.2f;
-    private float dashingCooldown = 1f;
+    private float dashingCooldown = 5f;
     public float maxPosition = 0;
 
     public Animator animator;
