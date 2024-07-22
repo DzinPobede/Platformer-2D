@@ -79,6 +79,7 @@ public class PlayerMovmentScript : MonoBehaviour
             StartCoroutine(Dash());
         }
 
+        //POINTS RECORDING
         if(transform.position.x > maxPosition)
         {
             maxPosition = transform.position.x;
@@ -115,8 +116,15 @@ public class PlayerMovmentScript : MonoBehaviour
             rb.velocity = new Vector2(0, 0);
             GetComponent<PlayerHealth>().health--;
         }
-        
+        else if(collision.gameObject.layer == 7)
+        {
+            GetComponent<PlayerHealth>().health--;
+            if(GetComponent<PlayerHealth>().health <= 0)
+            {
+                animator.SetTrigger("IsDead");
+            }
+        }
     }
+
+    
 }
-
-
