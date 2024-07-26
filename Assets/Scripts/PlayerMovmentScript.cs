@@ -18,6 +18,7 @@ public class PlayerMovmentScript : MonoBehaviour
 
     private bool canDash = true;
     private bool isDashing;
+    private bool damage = false;
     private readonly float dashingPower = 18f;
     private readonly float dashingTime = 0.2f;
     private readonly float dashingCooldown = 5f;
@@ -108,6 +109,13 @@ public class PlayerMovmentScript : MonoBehaviour
         canDash = true;
     }
 
+    private IEnumerator Damage()
+    {
+        damage = true;
+        yield return new WaitForSeconds(10f);
+        damage = false;
+    }
+
     private void OnCollisionEnter2D(Collision2D collision)
     {
         if(collision.gameObject.layer == 6)
@@ -115,6 +123,11 @@ public class PlayerMovmentScript : MonoBehaviour
             transform.position = new Vector3(-8.22f, -4, 0);
             rb.velocity = new Vector2(0, 0);
             GetComponent<PlayerHealth>().health--;
+            if(GetComponent<PlayerHealth>().health <= 0)
+            {
+                animator.SetTrigger("IsDead");
+                enabled = false;
+            }
         }
         else if(collision.gameObject.layer == 7)
         {
@@ -122,6 +135,7 @@ public class PlayerMovmentScript : MonoBehaviour
             if(GetComponent<PlayerHealth>().health <= 0)
             {
                 animator.SetTrigger("IsDead");
+                enabled = false;
             }
         }
     }
