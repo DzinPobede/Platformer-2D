@@ -14,6 +14,9 @@ public class PlayerMovmentScript : MonoBehaviour
     private readonly float groundCheckRadius = 0.2f;
     [SerializeField] private TrailRenderer trailRenderer;
     [SerializeField] private GameOverScreen gameOverScreen;
+    [SerializeField] private float timerAttackColdown;
+    [SerializeField] private float AttackCooldown;
+
 
 
     private bool canDash = true;
@@ -23,6 +26,9 @@ public class PlayerMovmentScript : MonoBehaviour
     private readonly float dashingTime = 0.2f;
     private readonly float dashingCooldown = 5f;
     public float maxPosition = 0;
+    public Transform attackPosition;
+    public LayerMask whatIsEnemies;
+    public float attackRange;
 
     public Animator animator;
 
@@ -85,7 +91,26 @@ public class PlayerMovmentScript : MonoBehaviour
         {
             maxPosition = transform.position.x;
         }
+
+        //ATTACK
+        if (AttackCooldown <= 0)
+        {
+            if (Input.GetKey(KeyCode.Mouse0))
+            {
+                Collider2D[] enemiesToDamage = Physics2D.OverlapCircleAll(attackPosition.position, attackRange, whatIsEnemies);
+                for (int i = 0; i < enemiesToDamage.Length; i++)
+                {
+                    enemiesToDamage[i].GetComponent<EnemyScript>().health -= 1;
+                }
+            }
+            AttackCooldown = timerAttackColdown;
+        }
+        else
+        {
+            AttackCooldown -= Time.deltaTime;
+        }
     }
+
     private void FixedUpdate()
     {
         if(isDashing)
@@ -139,6 +164,4 @@ public class PlayerMovmentScript : MonoBehaviour
             }
         }
     }
-
-    
 }
