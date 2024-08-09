@@ -4,32 +4,41 @@ using UnityEngine;
 public class EnemyScript : MonoBehaviour
 {
     [SerializeField] private float speed = 2f;
-    [SerializeField] private Transform A;
-    [SerializeField] private Transform B;
+    [SerializeField] private RespawnManager respawnManager;
+    [SerializeField] private float distance = 3f;
+    private Vector2 A;
+    private Vector2 B;
+    public GameObject objectToRespawn;
+    public Transform spawnPoint;
+    private float timer = 0f;
+    private bool isDestroyed = false;
     public int health = 1;
     private bool MovingToPointB = true;
+    
 
-    // Start is called before the first frame update
     void Start()
     {
+        A = new Vector2(transform.position.x, transform.position.y);
+        B = new Vector2(transform.position.x + distance, transform.position.y);
         StartCoroutine(MoveBetweenPoints());
+        respawnManager = FindObjectOfType<RespawnManager>();
     }
+
     IEnumerator MoveBetweenPoints()
     {
         while (true)
         {
-            Transform targetpoint = MovingToPointB ? B : A;
+            Vector2 targetpoint = MovingToPointB ? B : A;
 
-            while (Vector2.Distance(new Vector2(targetpoint.position.x, transform.position.y), transform.position) > 0.1f)
+            while (Vector2.Distance(targetpoint, transform.position) > 0.1f)
             {
-                transform.position = Vector2.MoveTowards(transform.position, new Vector2(targetpoint.position.x, transform.position.y), speed * Time.deltaTime);
+                transform.position = Vector2.MoveTowards(transform.position, targetpoint, speed * Time.deltaTime);
                 yield return null;
             }
 
             yield return new WaitForSeconds(0.5f);
 
             MovingToPointB = !MovingToPointB;
-
             Flip();
         }
     }
@@ -41,8 +50,10 @@ public class EnemyScript : MonoBehaviour
 
     void HealthStats()
     {
-        if(health <= 0)
+        if (health <= 0)
         {
+            isDestroyed = true;
+            respawnManager.StartRespawn();  // Assuming this handles any pre-respawn logic
             Destroy(gameObject);
         }
     }
@@ -54,4 +65,9 @@ public class EnemyScript : MonoBehaviour
         transform.localScale = localScale;
     }
 
+    void Respawn()
+    {
+        Instantiate(objectToRespawn, spawnPoint.position, spawnPoint.rotation);
+        isDestroyed = false;
+    }
 }
