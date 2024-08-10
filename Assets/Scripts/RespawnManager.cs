@@ -19,7 +19,7 @@ public class RespawnManager : MonoBehaviour
     IEnumerator RespawnEnemy()
     {
         isRespawning = true;
-        yield return new WaitForSeconds(1f);
+        yield return new WaitForSeconds(90f);
         Instantiate(enemy, spawnPoint.position, spawnPoint.rotation);
         isRespawning = false;
     }
