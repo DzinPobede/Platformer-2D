@@ -104,6 +104,7 @@ MonoBehaviour:
   distance: 4
   objectToRespawn: {fileID: 8887123244484681950}
   spawnPoint: {fileID: 0}
+  deadParticles: {fileID: 129233074160585439, guid: 7b47a3a99f9a025418a2fd09442dc05b, type: 3}
   health: 1
 --- !u!61 &8226445251316105832
 BoxCollider2D:

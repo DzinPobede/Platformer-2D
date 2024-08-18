@@ -12,8 +12,6 @@ public class EnemyScript : MonoBehaviour
     public GameObject objectToRespawn;
     public Transform spawnPoint;
     public ParticleSystem deadParticles;   
-    private float timer = 0f;
-    private bool isDestroyed = false;
     public int health = 1;
     private bool MovingToPointB = true;
     
@@ -54,7 +52,6 @@ public class EnemyScript : MonoBehaviour
     {
         if (health <= 0)
         {
-            isDestroyed = true;
             Instantiate(deadParticles, transform.position, Quaternion.identity);
             respawnManager.StartRespawn();  // Assuming this handles any pre-respawn logic
             Destroy(gameObject);
@@ -71,6 +68,5 @@ public class EnemyScript : MonoBehaviour
     void Respawn()
     {
         Instantiate(objectToRespawn, spawnPoint.position, spawnPoint.rotation);
-        isDestroyed = false;
     }
 }
